@@ -1,9 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text, Image, ScrollView} from 'react-native';
 
-import Inputs from '../components/Inputs';
-import Submit from '../components/Submit';
-import Account from '../components/Account';
 
 const SignUpSelector = props => {
     return (
@@ -40,7 +37,7 @@ const SignUpSelector = props => {
                 </View>
                 <View style={{flexDirection: 'row', marginVertical: 5}}>
                     <Text style={styles.textBody5}>Already Have an account ?</Text>
-                    <Text style={[styles.textBody5, {color: 'blue'}]} onPress={() => props.navigation.navigate('Home')}> Log In</Text>
+                    <Text style={[styles.textBody5, {color: 'blue'}]} onPress={() => props.navigation.navigate('login')}> Log In</Text>
                 </View>
             </View>
         </ScrollView>      
