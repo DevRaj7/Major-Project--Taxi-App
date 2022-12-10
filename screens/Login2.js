@@ -31,7 +31,7 @@ const Login2 = ({navigation}) => {
             .then((user) => {
               console.log(user);
               // If server response message same as Data Matched
-              if (user) navigation.navigate("Home")
+              if (user) navigation.navigate("RiderHome")
             })
             .catch((error) => {
               console.log(error);

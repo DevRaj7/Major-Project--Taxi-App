@@ -20,8 +20,7 @@ const Home = ({ navigation }) => {
   const [user, setUser] = useState();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const uuid=firebase.auth().currentUser.uid;
-  console.log(uuid);
+  var [name,setName]=useState('Aaditya');
   var lat=31.708447;
   var lon=76.52371;
   useEffect(() => {
@@ -50,14 +49,32 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged((user) => {
       console.log("user", JSON.stringify(user));
-      setUser(user);
+      setUser(user); 
+      if(user)
+      {
+        setName(user.displayName
+          ? user.displayName
+          : user.email);
+        }
     });
 
     return subscriber;
   }, []);
 
   const FindRide=()=>{
- 
+    firebase.app().firestore()
+    .collection('Ride Search')
+    .add({
+       name: name,
+        latitude: lat,
+        longitude: lon,
+    })
+    .then(() => {
+        
+        setTimeout(()=>{
+                alert("taxi is on the way");
+        },5000);
+    });
   };
   const logout = () => {
     Alert.alert(

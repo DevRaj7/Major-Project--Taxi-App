@@ -1,6 +1,6 @@
 import React ,{useState,createRef} from 'react';
 import {View,KeyboardAvoidingView,Keyboard, StyleSheet, Text,TextInput, Image,SafeAreaView, ScrollView,TouchableOpacity} from 'react-native';
-
+import firestore from '@react-native-firebase/firestore';
 import Input from '../components/Inputs';
 import Submit from '../components/Submit';
 import firebase from '../firebase'
@@ -27,6 +27,16 @@ const SignUp = ({ navigation }) => {
         console.log(
           "Registration Successful. Please Login to proceed"
         );
+        firebase.app().firestore()
+    .collection('Users')
+    .add({
+        name: name,
+        email: email,
+        password: password,
+    })
+    .then(() => {
+        console.log('User added!');
+    });
         console.log(user);
         if (user) {
          firebase.auth()

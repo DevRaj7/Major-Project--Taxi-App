@@ -40,7 +40,7 @@ const SplashScreen = ({ navigation }) => {
           style={{
             width: "90%",
             resizeMode: "contain",
-            margin: 30,
+            margin: 20,
           }}
         />
         <ActivityIndicator
@@ -55,7 +55,7 @@ const SplashScreen = ({ navigation }) => {
           fontSize: 18,
           textAlign: "center",
           color: "white",
-          marginTop:10
+          marginTop:3
         }}
       >
        Welcome to My taxi
@@ -83,6 +83,6 @@ const styles = StyleSheet.create({
   },
   activityIndicator: {
     alignItems: "center",
-    height: 80,
+    height: 40,
   },
 });

@@ -31,6 +31,18 @@ const RiderSignUp = ({ navigation }) => {
         console.log(
           "Registration Successful. Please Login to proceed"
         );
+        firebase.app().firestore()
+        .collection('Drivers')
+        .add({
+            name: name,
+            email: email,
+            password: password,
+            vehicle: vehicle,
+            license: license,
+        })
+        .then(() => {
+            console.log('User added!');
+        });
         console.log(user);
         if (user) {
          firebase.auth()
