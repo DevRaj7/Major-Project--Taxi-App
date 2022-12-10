@@ -11,11 +11,41 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import * as Location from 'expo-location';
 
-import firebase from  '../firebase' 
+import firebase from  '../firebase' ;
+import MapView from 'react-native-maps';
 
 const Home = ({ navigation }) => {
   const [user, setUser] = useState();
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const uuid=firebase.auth().currentUser.uid;
+  console.log(uuid);
+  var lat=31.708447;
+  var lon=76.52371;
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+    lat=location.coords.latitude;
+    lon=location.coords.longitude;
+  }
 
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged((user) => {
@@ -26,6 +56,9 @@ const Home = ({ navigation }) => {
     return subscriber;
   }, []);
 
+  const FindRide=()=>{
+ 
+  };
   const logout = () => {
     Alert.alert(
       "Logout",
@@ -58,7 +91,20 @@ const Home = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, padding: 16 }}>
+       <View style={styles.container}>
+     <MapView
+       //provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+       style={styles.map}
+       region={{
+         latitude: lat,
+         longitude: lon,
+         latitudeDelta: 0.015,
+         longitudeDelta: 0.0121,
+       }}
+     >
+     </MapView>
+   </View>
+      <View style={{ flex: 1, padding: 16,marginTop:590}}>
         <View
           style={{
             flex: 1,
@@ -66,25 +112,32 @@ const Home = ({ navigation }) => {
             justifyContent: "center",
           }}
         >
-          <Text
-            style={{
+          
+          {user ? (
+            <Text  style={{
               fontSize: 20,
               textAlign: "center",
               marginBottom: 16,
-            }}
-          >
-            Firebase Auth
-          </Text>
-          {user ? (
-            <Text>
-              Welcome User{" "}
+              
+            }}>
+              Welcome {" "}
               {user.displayName
                 ? user.displayName
                 : user.email}
             </Text>
           ) : null}
-          <TouchableOpacity
+         <TouchableOpacity
             style={styles.buttonStyle}
+            activeOpacity={0.5}
+            onPress={FindRide}
+           
+          >
+            <Text style={styles.buttonTextStyle}>
+              Find Your Ride 
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonStyle1}
             activeOpacity={0.5}
             onPress={logout}
           >
@@ -112,6 +165,7 @@ const Home = ({ navigation }) => {
          
         </Text>
       </View>
+     
     </SafeAreaView>
   );
 };
@@ -128,14 +182,34 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: "center",
     borderRadius: 30,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 20,
-    marginBottom: 25,
+    margin:10
+  },
+  buttonStyle1: {
+    minWidth: 300,
+    backgroundColor: "#FF0000",
+    borderWidth: 0,
+    color: "#FF0000",
+    borderColor: "#7DE24E",
+    height: 40,
+    alignItems: "center",
+    borderRadius: 30,
+    marginTop:5
   },
   buttonTextStyle: {
     color: "#FFFFFF",
     paddingVertical: 10,
     fontSize: 16,
+  },
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    height: 580,
+    width: 400,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    borderWidth:2,
+    borderColor:'black'
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
 });
