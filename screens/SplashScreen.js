@@ -25,7 +25,7 @@ const SplashScreen = ({ navigation }) => {
       // If not then send for Authentication
       // else send to Home Screen
       navigation.replace(
-        firebase.auth().currentUser ? "home" : "Auth"
+        firebase.auth().currentUser ? "Home" : "Auth"
       );
     }, 3000);
   }, []);
